@@ -5,14 +5,15 @@
 #include <oneapi/tbb/parallel_for.h>
 #include <oneapi/tbb/task_arena.h>
 #include <boost/atomic.hpp>
-#include <boost/atomic/atomic_ref.hpp>
+//#include <mutex>
 
 int main()
  {
   int num_steps = 1<<20;
   double pi = 0.;
   double step = 1.0/(double) num_steps;
-  boost::atomic<double> sum;
+  boost::atomic<double> sum; // Figo
+  // std::mutex mu; // Se usassi mutex
   sum = 0.;
 
   // Not parallelized
@@ -29,7 +30,11 @@ int main()
         for(int i = range.begin(); i< range.end(); ++i)
         {
             auto x = (i+0.5)*step;
-            sum += 4.0/(1.0+x*x);
+
+            //std::lock_guard l(mu);
+            //sum += sum ...
+
+            sum.fetch_add( 4.0/(1.0+x*x) );
         }
     });
   
