@@ -1,3 +1,3 @@
-# ESC22-exercises
+# Exercises
 
 Generic training exercises.
